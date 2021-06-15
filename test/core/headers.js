@@ -197,5 +197,17 @@ describe("Core htmx AJAX headers", function () {
         htmx.off('foo', handler);
     })
 
+    it("should match headers exactly", function () {
+        this.server.respondWith("GET", "/test", [200, {"X-HX-Trigger": "foo"}, ""]);
+
+        var div = make('<div hx-get="/test"></div>');
+        var invokedEvent = false;
+        div.addEventListener("foo", function (evt) {
+            invokedEvent = true;
+        });
+        div.click();
+        this.server.respond();
+        invokedEvent.should.equal(false);
+    })
 
 });

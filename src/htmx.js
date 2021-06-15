@@ -2039,8 +2039,8 @@ return (function () {
             }
         }
 
-        function hasHeader(xhr, regexp) {
-            return xhr.getAllResponseHeaders().match(regexp);
+        function hasHeader(xhr, header) {
+            return xhr.getResponseHeader(header) !== null;
         }
 
         function ajaxHelper(verb, path, context) {
@@ -2318,20 +2318,20 @@ return (function () {
 
             if (!triggerEvent(elt, 'htmx:beforeOnLoad', responseInfo)) return;
 
-            if (hasHeader(xhr, /HX-Trigger:/i)) {
+            if (hasHeader(xhr, "HX-Trigger")) {
                 handleTrigger(xhr, "HX-Trigger", elt);
             }
 
-            if (hasHeader(xhr,/HX-Push:/i)) {
+            if (hasHeader(xhr,"HX-Push")) {
                 var pushedUrl = xhr.getResponseHeader("HX-Push");
             }
 
-            if (hasHeader(xhr, /HX-Redirect:/i)) {
+            if (hasHeader(xhr, "HX-Redirect")) {
                 window.location.href = xhr.getResponseHeader("HX-Redirect");
                 return;
             }
 
-            if (hasHeader(xhr,/HX-Refresh:/i)) {
+            if (hasHeader(xhr,"HX-Refresh")) {
                 if ("true" === xhr.getResponseHeader("HX-Refresh")) {
                     location.reload();
                     return;
@@ -2402,7 +2402,7 @@ return (function () {
                                 location.hash = responseInfo.pathInfo.anchor;
                             }
 
-                            if (hasHeader(xhr, /HX-Trigger-After-Swap:/i)) {
+                            if (hasHeader(xhr, "HX-Trigger-After-Swap")) {
                                 var finalElt = elt;
                                 if (!bodyContains(elt)) {
                                     finalElt = getDocument().body;
@@ -2428,7 +2428,7 @@ return (function () {
                                 }
                                 updateScrollState(settleInfo.elts, swapSpec);
 
-                                if (hasHeader(xhr, /HX-Trigger-After-Settle:/i)) {
+                                if (hasHeader(xhr, "HX-Trigger-After-Settle")) {
                                     var finalElt = elt;
                                     if (!bodyContains(elt)) {
                                         finalElt = getDocument().body;
